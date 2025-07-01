@@ -10,13 +10,13 @@ For a more streamlined experience, you can use `vvctl`, the official Ververica c
 
 Currently we distribute `vvctl` compiled and tested for these systems: Apple Silicon and Linux x86_64.
 
-### Installation via script
-
-You can install `vvctl`, paste this in a Terminal
-
-```sh
-/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/ververica/vvctl/HEAD/install.sh)"
-```
+<!-- ### Installation via script -->
+<!---->
+<!-- You can install `vvctl`, paste this in a Terminal -->
+<!---->
+<!-- ```sh -->
+<!-- /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/ververica/vvctl/HEAD/install.sh)" -->
+<!-- ``` -->
 
 ### Installation via Homebrew
 
@@ -46,7 +46,7 @@ The footer always shows the shortcuts available in your current view.
 
 To exit the application, press `q`.
 
-![vvctl interactive mode](./cli-interactive.png)
+![vvctl interactive mode](./images/cli-interactive.png)
 
 ### Command mode
 
