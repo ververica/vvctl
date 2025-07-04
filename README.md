@@ -20,10 +20,27 @@ Currently we distribute `vvctl` compiled and tested for these systems: Apple Sil
 
 ### Installation via Homebrew
 
-If you on macOS, you can use [Homebrew](https://brew.sh/)
+If you are on macOS, you can use [Homebrew](https://brew.sh/)
 
 ```sh
 brew tap ververica/vvctl && brew install vvctl
+```
+
+### Installation via Nix
+
+On Linux you can use [Nix pacakge manager](https://nixos.org/download/#download-nix).
+It's required to have [`flakes` and `nix-command` enabled](https://nixos.wiki/wiki/Flakes).
+
+```sh
+nix profile install github:ververica/vvctl
+```
+
+### Installation via script
+
+On macOS and Linux you can use a script to download the latest release.
+
+```sh
+sh -c "$(curl -fsSL https://raw.githubusercontent.com/ververica/vvctl/main/install.sh)"
 ```
 
 ### Manual installation
