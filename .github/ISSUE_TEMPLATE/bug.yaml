@@ -40,7 +40,7 @@ body:
     validations:
       required: false
   - type: dropdown
-    id: os
+    id: installation
     attributes:
       label: "installation"
       description: What method was used for the installation?
