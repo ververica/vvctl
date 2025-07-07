@@ -14,14 +14,14 @@
       {
         packages.default = pkgs.stdenv.mkDerivation rec {
           pname = "vvctl";
-          version = "2025.7.1-test.1"; # Updated by workflow
+          version = "2025.7.1-test.2"; # Updated by workflow
           
           src = pkgs.fetchurl {
             url = "https://github.com/ververica/vvctl/releases/download/${version}/vvctl-${version}-x86_64-unknown-linux-gnu.tar.gz";
-            sha256 = "2a45a826e0c06344da6b55867c237063330d008f0422a6d7955b982c112fa218"; # Updated by workflow
+            sha256 = "81e3c15f0608256ae1e04697241b6f86d8572270018eda0d0c8a44dc379f764d"; # Updated by workflow
           };
 
-          sourceRoot = "vvctl-2025.7.1-test.1-x86_64-unknown-linux-gnu";
+          sourceRoot = "vvctl-2025.7.1-test.2-x86_64-unknown-linux-gnu";
 
           installPhase = ''
             runHook preInstall
