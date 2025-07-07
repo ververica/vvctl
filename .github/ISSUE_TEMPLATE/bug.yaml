@@ -1,0 +1,61 @@
+---
+name: Bug Report
+description: File a bug report
+title: "[Bug]: "
+labels: ["bug", "triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for your collaboration!
+  - type: textarea
+    id: what-expected
+    attributes:
+      label: What was expected to happened?
+      placeholder: Expected behavior
+    validations:
+      required: true
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What actually happened?
+      placeholder: Current behavior
+    validations:
+      required: true
+  - type: input
+    id: command
+    attributes:
+      label: Affected commands
+      description: What commands are affected?
+      placeholder: "Ex: get workspaces"
+  - type: dropdown
+    id: os
+    attributes:
+      label: "OS"
+      description: What is your OS architecture?
+      multiple: true
+      options:
+        - Linux x86
+        - Apple Silicon
+    validations:
+      required: false
+  - type: dropdown
+    id: os
+    attributes:
+      label: "installation"
+      description: What method was used for the installation?
+      multiple: true
+      options:
+        - Homebrew
+        - Nix
+        - Script
+        - Manual
+    validations:
+      required: false
+  - type: textarea
+    id: environment
+    attributes:
+      label: You environment
+      placeholder: Tell us about your workspace, deployment type, and any information that help us
+    validations:
+      required: false
