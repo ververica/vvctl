@@ -243,3 +243,39 @@ $ vvctl create deployment jar -f jar-deployment.yml
 ```
 
 The yaml file is the same schema as the output from the command `vvctl get deployment`, so you can use it as a template.
+
+## GitHub Action
+
+Install vvctl in your GitHub Actions workflows.
+
+## Usage
+
+```yaml
+- name: Setup vvctl
+  uses: ververica/vvctl@main
+```
+
+## Options
+
+| Input | Description | Default |
+|-------|-------------|---------|
+| `version` | Specific version to install (e.g. v1.2.3) | latest stable |
+| `prerelease` | Install latest prerelease | `false` |
+| `install-dir` | Installation directory | `/usr/local/bin` |
+
+## Examples
+
+```yaml
+# Latest stable
+- uses: ververica/vvctl@main
+
+# Specific version
+- uses: ververica/vvctl@main
+  with:
+    version: 'v1.2.3'
+
+# Latest prerelease
+- uses: ververica/vvctl@main
+  with:
+    prerelease: true
+```
