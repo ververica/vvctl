@@ -3,12 +3,9 @@ name: Test vvctl Installation
 on:
   push:
     branches: [ main ]
-  pull_request:
-    branches: [ main ]
-  workflow_dispatch:
 
 jobs:
-  test-vvctl:
+  test-install-vvctl:
     runs-on: ubuntu-latest
     
     steps:
@@ -16,7 +13,7 @@ jobs:
       uses: actions/checkout@v4
       
     - name: Setup vvctl
-      uses: ververica/vvctl@github-action
+      uses: ververica/vvctl@main
       
     - name: Print vvctl version
       run: vvctl --version
