@@ -37,10 +37,16 @@ nix profile install github:ververica/vvctl
 
 ### Installation via script
 
-On macOS and Linux you can use a script to download the latest release.
+On macOS and Linux you can use a script to download the latest release:
 
 ```sh
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/ververica/vvctl/main/install.sh)"
+```
+
+On windows you can use a powershell script:
+
+```sh
+Set-ExecutionPolicy Bypass -Scope Process -Force; iex (irm 'https://raw.githubusercontent.com/ververica/vvctl/main/install.ps1')
 ```
 
 ### Manual installation
@@ -257,11 +263,11 @@ Install vvctl in your GitHub Actions workflows.
 
 ## Options
 
-| Input | Description | Default |
-|-------|-------------|---------|
-| `version` | Specific version to install (e.g. v1.2.3) | latest stable |
-| `prerelease` | Install latest prerelease | `false` |
-| `install-dir` | Installation directory | `/usr/local/bin` |
+| Input         | Description                               | Default          |
+| ------------- | ----------------------------------------- | ---------------- |
+| `version`     | Specific version to install (e.g. v1.2.3) | latest stable    |
+| `prerelease`  | Install latest prerelease                 | `false`          |
+| `install-dir` | Installation directory                    | `/usr/local/bin` |
 
 ## Examples
 
@@ -272,7 +278,7 @@ Install vvctl in your GitHub Actions workflows.
 # Specific version
 - uses: ververica/vvctl@main
   with:
-    version: 'v1.2.3'
+    version: "v1.2.3"
 
 # Latest prerelease
 - uses: ververica/vvctl@main
