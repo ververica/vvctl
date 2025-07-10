@@ -37,13 +37,16 @@ nix profile install github:ververica/vvctl
 
 ### Installation via script
 
-On macOS and Linux you can use a script to download the latest release:
+You can use a script to download the latest release or to update
+your current installation.
+
+On **macOS** and **Linux**, copy and paste in your terminal:
 
 ```sh
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/ververica/vvctl/main/install.sh)"
 ```
 
-On windows you can use a powershell script:
+On **Windows**, copy and paste the next code in your PowerShell terminal:
 
 ```sh
 Set-ExecutionPolicy Bypass -Scope Process -Force; iex (irm 'https://raw.githubusercontent.com/ververica/vvctl/main/install.ps1')
@@ -57,6 +60,14 @@ You can install `vvctl` by downloading the binary.
 1. Download the binary for your system
 1. Extract the archive.
 1. Move the `vvctl` binary to a directory in your system's `PATH`. For Linux and macOS, ensure it is executable (`chmod +x vvctl`).
+
+Once installed run
+
+```sh
+vvctl --version
+```
+
+to check you have the expected version.
 
 ## Usage
 
@@ -144,8 +155,16 @@ Options:
 
 ### Configuration
 
-The configuration file can be found at `~/.config/vvctl/settings.json`. You would only need to edit this file
-in case you have an special requirement, otherwise the default values should just work fine.
+The tool uses the the next folders by default
+
+| OS            | config folder                 | data folder                 |
+| ------------- | ----------------------------- | --------------------------- |
+| Linux / macOS | `~/.config/vvctl`             | `~/.local/share/vvctl`      |
+| Windows       | `$HOME\AppData\Roaming\vvctl` | `$HOME\AppData\Local\vvctl` |
+
+The configuration file can be found in the file `settings.json` in your config folder.
+You would only need to edit this file in case you have an special requirement,
+otherwise the default values should just work fine.
 
 This is the default configuration
 
