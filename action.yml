@@ -1,34 +1,35 @@
-name: 'Setup vvctl'
-description: 'Download and install vvctl CLI tool'
-author: 'Ververica'
+---
+name: "Setup vvctl"
+description: "Download and install vvctl CLI tool"
+author: "Ververica"
 
 inputs:
   version:
-    description: 'Version of vvctl to install (e.g. v1.2.3). If not specified, installs the latest stable release.'
+    description: "Version of vvctl to install (e.g. v1.2.3). If not specified, installs the latest stable release."
     required: false
-    default: ''
-  
+    default: ""
+
   prerelease:
-    description: 'Install the latest prerelease version instead of stable release'
+    description: "Install the latest prerelease version instead of stable release"
     required: false
-    default: 'false'
-  
+    default: "false"
+
   install-dir:
-    description: 'Directory to install vvctl binary'
+    description: "Directory to install vvctl binary"
     required: false
-    default: '/usr/local/bin'
+    default: "/usr/local/bin"
 
 outputs:
   version:
-    description: 'The version of vvctl that was installed'
+    description: "The version of vvctl that was installed"
     value: ${{ steps.install.outputs.version }}
-  
+
   install-path:
-    description: 'The full path where vvctl was installed'
+    description: "The full path where vvctl was installed"
     value: ${{ steps.install.outputs.install-path }}
 
 runs:
-  using: 'composite'
+  using: "composite"
   steps:
     - name: Validate inputs
       shell: bash
@@ -37,7 +38,7 @@ runs:
           echo "Error: Cannot specify both version and prerelease=true" >&2
           exit 1
         fi
-    
+
     - name: Install vvctl
       id: install
       shell: bash
@@ -47,7 +48,7 @@ runs:
         # Download the install script
         curl -fsSL https://raw.githubusercontent.com/ververica/vvctl/main/install.sh -o install.sh
         chmod +x install.sh
-        
+
         # Determine arguments to pass to install script
         if [ "${{ inputs.prerelease }}" = "true" ]; then
           echo "Installing latest prerelease..."
@@ -59,17 +60,17 @@ runs:
           echo "Installing latest stable version..."
           ./install.sh
         fi
-        
+
         # Set outputs
         INSTALLED_VERSION=$(${INSTALL_DIR}/vvctl --version 2>/dev/null | head -1 | awk '{print $2}' || echo "unknown")
         echo "version=${INSTALLED_VERSION}" >> $GITHUB_OUTPUT
         echo "install-path=${INSTALL_DIR}/vvctl" >> $GITHUB_OUTPUT
-        
+
         # Add to PATH if not already there
         if [[ ":$PATH:" != *":${INSTALL_DIR}:"* ]]; then
           echo "${INSTALL_DIR}" >> $GITHUB_PATH
         fi
-    
+
     - name: Verify installation
       shell: bash
       run: |
@@ -77,11 +78,9 @@ runs:
           echo "Error: vvctl installation failed or not in PATH" >&2
           exit 1
         fi
-        
+
         echo "✅ vvctl installed successfully!"
-        echo "Version: $(vvctl --version || echo 'Version check failed')"
-        echo "Location: $(which vvctl)"
 
 branding:
-  icon: 'download'
-  color: 'blue'
+  icon: "download"
+  color: "blue"
