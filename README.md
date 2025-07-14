@@ -8,32 +8,8 @@ For a more streamlined experience, you can use `vvctl`, the official Ververica c
 
 ## Installation
 
-Currently we distribute `vvctl` compiled and tested for these systems: Apple Silicon and Linux x86_64.
-
-<!-- ### Installation via script -->
-<!---->
-<!-- You can install `vvctl`, paste this in a Terminal -->
-<!---->
-<!-- ```sh -->
-<!-- /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/ververica/vvctl/HEAD/install.sh)" -->
-<!-- ``` -->
-
-### Installation via Homebrew
-
-If you are on macOS, you can use [Homebrew](https://brew.sh/)
-
-```sh
-brew tap ververica/vvctl && brew install vvctl
-```
-
-### Installation via Nix
-
-On Linux you can use [Nix pacakge manager](https://nixos.org/download/#download-nix).
-It's required to have [`flakes` and `nix-command` enabled](https://nixos.wiki/wiki/Flakes).
-
-```sh
-nix profile install github:ververica/vvctl
-```
+Currently we distribute `vvctl` compiled and tested for these systems: Apple Silicon, Linux x86_64
+and Windows x86_64.
 
 ### Installation via script
 
@@ -50,6 +26,23 @@ On **Windows**, copy and paste the next code in your PowerShell terminal:
 
 ```sh
 Set-ExecutionPolicy Bypass -Scope Process -Force; iex (irm 'https://raw.githubusercontent.com/ververica/vvctl/main/install.ps1')
+```
+
+### Installation via Homebrew
+
+If you are on macOS, you can use [Homebrew](https://brew.sh/)
+
+```sh
+brew tap ververica/vvctl && brew install vvctl
+```
+
+### Installation via Nix
+
+On Linux you can use [Nix pacakge manager](https://nixos.org/download/#download-nix).
+It's required to have [`flakes` and `nix-command` enabled](https://nixos.wiki/wiki/Flakes).
+
+```sh
+nix profile install github:ververica/vvctl
 ```
 
 ### Manual installation
@@ -69,42 +62,28 @@ vvctl --version
 
 to check you have the expected version.
 
-## Usage
-
 ### Interactive mode
 
 When running the tool without commands `vvctl`, you will enter in the interative mode where you can manage your workspaces and deployments
 in a more visual way. In this mode, you can use the `arrows` or `hjkl` to move around and `space` or `enter` to select.
-
-The footer always shows the shortcuts available in your current view.
-
-To exit the application, press `q`.
-
-![vvctl interactive mode](./images/cli-interactive.png)
-
-### Command mode
-
-You can use `vvctl` followed by a command and subcommand.
-These are the action commands available
-
-```sh
 Usage:
-  vvctl [COMMAND]
+vvctl [COMMAND]
 
 Commands:
-  login           Log in Ververica Cloud
-  logout          Log out of Ververica Cloud
-  get             Display one or more resources
-  create          Create a new resource
-  delete          Delete a resource
-  start           Start a resource
-  stop            Stop a resource
-  install         Install a resource
-  uninstall       Uninstall a resource
-  default-config  Print the default configuration
-  interactive     Run interactive mode
-  help            Print this message or the help of the given subcommand(s)
-```
+login Log in Ververica Cloud
+logout Log out of Ververica Cloud
+get Display one or more resources
+create Create a new resource
+delete Delete a resource
+start Start a resource
+stop Stop a resource
+install Install a resource
+uninstall Uninstall a resource
+default-config Print the default configuration
+interactive Run interactive mode
+help Print this message or the help of the given subcommand(s)
+
+````
 
 To have a more information about each command we recommend to use the option `--help` to know more about an specific
 command and its subcommands and options.
@@ -151,11 +130,11 @@ Options:
           Output format [default: table] [possible values: table, json, yaml, yml]
   -h, --help
           Print help
-```
+````
 
 ### Configuration
 
-The tool uses the the next folders by default
+The tool uses the next folders by default
 
 | OS            | config folder                 | data folder                 |
 | ------------- | ----------------------------- | --------------------------- |
@@ -185,7 +164,7 @@ where
 | -------------- | :----------------------------------------------------------------------------- |
 | `session_path` | File path to store the authentication session. You can leave the default value |
 | `api_host`     | URl of you of the Ververica API. By default `https://app.ververica.cloud`.     |
-| `agent_*`      | Parameters for the agent installation. Leave the default values                |
+| `agent_*`      | Parameters for the BYOC agent installation. Leave the default values           |
 
 #### Using Environment variables
 
@@ -214,7 +193,7 @@ your user has access to this file.
 If the authentication stored is not valid, the tool will ask for the credentials when executing any command
 if they are not setup in as environment variables.
 
-You can always authenticate directly using the command `vvctl login` using your credentials or API token.
+You can always authenticate directly using the command `vvctl login` with your credentials or API token.
 
 ### Output formats
 
@@ -231,7 +210,7 @@ vvctl get deployments --workspace migpc9aex9vi1v --o yaml | yq eval '.deployment
 
 ### Creating a deployment
 
-You can create a deployment using the command `vvctl create deployment`. Currently only JAR and PYTHON deployments are supported.
+You can create a deployment by using the command `vvctl create deployment`. Currently only JAR and PYTHON deployments are supported.
 
 Before creating a deployment, you need to create an artifact `vvctl create artifact` and use the URI of the artifact in your
 deployment.
@@ -252,7 +231,7 @@ You can get more information using `--help` to see what other options you can us
 You can also use a file with all the values. For example, given a file called `jar-deployment.yml`
 
 ```sh
-$ cat jar-deploymentyml
+$ cat jar-deployment.yml
 ---
 artifact:
   kind: JAR
@@ -269,18 +248,30 @@ $ vvctl create deployment jar -f jar-deployment.yml
 
 The yaml file is the same schema as the output from the command `vvctl get deployment`, so you can use it as a template.
 
+## CI/CD Integration
+
+We also provide some mechanisms to support the usage of the CLI in your pipelines.
+
 ## GitHub Action
 
-Install vvctl in your GitHub Actions workflows.
+You can use this action to easily have the cli available in your github runner.
 
-## Usage
+### Usage
+
+To use it, just add this step to your job in your workflow:
 
 ```yaml
 - name: Setup vvctl
   uses: ververica/vvctl@main
 ```
 
-## Options
+By default, this step will install the latest stable version available in the path
+`/usr/local/bin`.
+
+### Options
+
+Sometimes you might need a different version or a different installation directory.
+If this is your case, we provide these parameters you can use as inputs in your step.
 
 | Input         | Description                               | Default          |
 | ------------- | ----------------------------------------- | ---------------- |
@@ -288,19 +279,32 @@ Install vvctl in your GitHub Actions workflows.
 | `prerelease`  | Install latest prerelease                 | `false`          |
 | `install-dir` | Installation directory                    | `/usr/local/bin` |
 
-## Examples
+### Examples
+
+Here we show different uses:
 
 ```yaml
 # Latest stable
 - uses: ververica/vvctl@main
 
-# Specific version
+# Specific version and custom installation folder
 - uses: ververica/vvctl@main
   with:
     version: "v1.2.3"
+    install-dir: ~/bin
 
 # Latest prerelease
 - uses: ververica/vvctl@main
   with:
     prerelease: true
 ```
+
+## Reporting an issue
+
+If you find a bug or you have a request to improve you can use
+our [issue tracker](https://github.com/ververica/vvctl/issues) at GitHub.
+
+Feel free to open a new bug issue or feature request if you want to improve or add a
+new functionality.
+
+[Open an issue](https://github.com/ververica/vvctl/issues)
