@@ -62,7 +62,7 @@ runs:
         fi
 
         # Set outputs
-        INSTALLED_VERSION=$(${INSTALL_DIR}/vvctl --version 2>/dev/null | head -1 | awk '{print $2}' || echo "unknown")
+        INSTALLED_VERSION=$(${INSTALL_DIR}/vvctl --version | awk '/^[0-9]/{print $1; exit}')
         echo "version=${INSTALLED_VERSION}" >> $GITHUB_OUTPUT
         echo "install-path=${INSTALL_DIR}/vvctl" >> $GITHUB_OUTPUT
 
