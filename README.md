@@ -319,4 +319,4 @@ This is not an open-source project. Source code is not available.
 
 The CLI is provided solely to enable users to access and manage their Ververica Cloud services.
 
-Use of this tool is subject to the license agreement and Ververica's applicable Terms of Service.
+Use of this tool is subject to the license agreement and Ververica's applicable [Terms of Service](https://www.ververica.com/terms-of-service).
