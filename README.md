@@ -308,3 +308,15 @@ Feel free to open a new bug issue or feature request if you want to improve or a
 new functionality.
 
 [Open an issue](https://github.com/ververica/vvctl/issues)
+
+## Legal notice
+
+This repository provides the [Ververica Cloud Command-Line Interface (CIL)] as a pre-compiled binary for download.
+
+Note:
+
+This is not an open-source project. Source code is not available.
+
+The CLI is provided solely to enable users to access and manage their Ververica Cloud services.
+
+Use of this tool is subject to the license agreement and Ververica's applicable Terms of Service.

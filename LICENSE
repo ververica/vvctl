@@ -1,0 +1,19 @@
+Copyright ©2025 Ververica GmbH All rights reserved.
+
+This software is provided as a binary-only distribution for the purpose of
+accessing and using Ververica Cloud services provided by Ververica GmbH.
+
+You may download and use the binary solely for accessing and interacting with
+Ververica Cloud services you have licensed.
+
+You may NOT:
+
+- Reverse engineer, decompile, or disassemble the software.
+- Modify, adapt, or create derivative works.
+- Redistribute, sublicense, lease, or sell the software.
+- Use the software for any unauthorized or unlawful purpose.
+- This software is owned by Ververica GmbH and is protected by copyright and
+  applicable intellectual property laws. No source code is provided, and no
+  open-source license (such as MIT, Apache, or BSD) applies.
+
+By using this software, you agree to be bound by the terms of this license and Ververica's applicable [Terms of Service](https://www.ververica.com/terms-of-service).
