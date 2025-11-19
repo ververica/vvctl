@@ -16,14 +16,13 @@ and Windows x86_64.
 You can use a script to download the latest release or to update
 your current installation.
 
-On **macOS** and **Linux**, copy and paste in your terminal:
+On **macOS** and **Linux**, copy and paste in your terminal to install the latest stable version:
 
 ```sh
-sh -c "$(curl -fsSL https://raw.githubusercontent.com/ververica/vvctl/main/install.sh)"
+curl -fsSL https://raw.githubusercontent.com/ververica/vvctl/main/install.sh | bash
 ```
 
-This will install the latest stable version. If you want to install the latest preview or
-an specific version you can use
+If you want to install the latest preview or an specific version, you can use
 
 ```sh
 # Install latest preview version
@@ -33,7 +32,8 @@ curl -fsSL https://raw.githubusercontent.com/ververica/vvctl/main/install.sh | b
 curl -fsSL https://raw.githubusercontent.com/ververica/vvctl/main/install.sh | bash -s -- 2025.7.9
 ```
 
-On **Windows**, copy and paste the next code in your PowerShell terminal:
+On **Windows**, copy and paste the next code in your PowerShell terminal to
+install the latest stable version:
 
 ```sh
 Set-ExecutionPolicy Bypass -Scope Process -Force; `
@@ -55,11 +55,13 @@ iex (irm 'https://raw.githubusercontent.com/ververica/vvctl/main/install.ps1') -
 
 ### Installation via Homebrew
 
-If you are on macOS, you can use [Homebrew](https://brew.sh/)
+If you are on macOS, you can use [Homebrew](https://brew.sh/) to install the latest stable version.
 
 ```sh
 brew tap ververica/vvctl && brew install vvctl
 ```
+
+Preview versions are not available through brew.
 
 ### Installation via Nix
 
@@ -69,6 +71,8 @@ It's required to have [`flakes` and `nix-command` enabled](https://nixos.wiki/wi
 ```sh
 nix profile install github:ververica/vvctl
 ```
+
+Preview versions are not available trhough Nix.
 
 ### Manual installation
 
@@ -85,7 +89,7 @@ Once installed run
 vvctl --version
 ```
 
-to check you have the expected version.
+to check you have the downloaded version.
 
 ### Interactive mode
 
