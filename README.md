@@ -22,10 +22,35 @@ On **macOS** and **Linux**, copy and paste in your terminal:
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/ververica/vvctl/main/install.sh)"
 ```
 
+This will install the latest stable version. If you want to install the latest preview or
+an specific version you can use
+
+```sh
+# Install latest preview version
+curl -fsSL https://raw.githubusercontent.com/ververica/vvctl/main/install.sh | bash -s -- --preview
+
+# Install an specific version
+curl -fsSL https://raw.githubusercontent.com/ververica/vvctl/main/install.sh | bash -s -- 2025.7.9
+```
+
 On **Windows**, copy and paste the next code in your PowerShell terminal:
 
 ```sh
-Set-ExecutionPolicy Bypass -Scope Process -Force; iex (irm 'https://raw.githubusercontent.com/ververica/vvctl/main/install.ps1')
+Set-ExecutionPolicy Bypass -Scope Process -Force; `
+iex (irm 'https://raw.githubusercontent.com/ververica/vvctl/main/install.ps1')
+```
+
+To install the latest preview or an specific version
+
+```sh
+# Install the latest preview version
+Set-ExecutionPolicy Bypass -Scope Process -Force; `
+iex (irm 'https://raw.githubusercontent.com/ververica/vvctl/main/install.ps1') -Preview
+
+# Install an specific version
+Set-ExecutionPolicy Bypass -Scope Process -Force; `
+iex (irm 'https://raw.githubusercontent.com/ververica/vvctl/main/install.ps1') -Version 2025.7.9
+
 ```
 
 ### Installation via Homebrew
