@@ -63,7 +63,7 @@ Running `vvctl` with no arguments opens the TUI. Navigation: arrows or `hjkl`; s
 
 ### Command mode
 
-`vvctl [COMMAND]` for non-interactive use. Common groups: `login/logout`, `get/create/delete/start/stop`, `run`, `validate`, `logs`, `install/uninstall`, `config`, `mcp start`. Use `--help` on any subcommand for exact flags and options.
+`vvctl [COMMAND]` for non-interactive use. Common groups: `login/logout`, `get/create/delete/start/stop`, `run`, `validate`, `logs`, `install/uninstall`, `config`. Use `--help` on any subcommand for exact flags and options.
 
 ### Output formats
 
@@ -106,14 +106,6 @@ vvctl create deployment jar \
 ## Authentication
 
 Authenticate with `vvctl login` (email/password) or set `VV_API_TOKEN`. Tokens are cached in the data directory (`session` file). If a cached token expires, vvctl will prompt again or reuse env vars.
-
-## MCP server (experimental)
-
-- Start locally (stdio): `vvctl mcp start`
-- Client config: command `vvctl`, args ["mcp", "start"]
-- Uses the current vvctl context/session; set it via `vvctl config use-context …` and `vvctl login`.
-- Workspace/namespace parameters honor `VV_WORKSPACE` / `VV_NAMESPACE` (namespace defaults to `default`).
-- Tools exposed: account, config, workspaces/engines, deployments, drafts, artifacts, secrets, logs, agents, task managers.
 
 ## Output formats (quick reference)
 
