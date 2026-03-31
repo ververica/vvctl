@@ -18,6 +18,14 @@ We ship pre-built binaries for Apple Silicon, Linux x86_64, and Windows x86_64.
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/ververica/vvctl/main/install.sh)"
 ```
 
+By default, the binary is installed to `~/.local/bin`. Make sure this directory is in your `PATH`:
+
+```sh
+export PATH="$HOME/.local/bin:$PATH"
+```
+
+Add this line to your shell profile (`~/.bashrc`, `~/.zshrc`, etc.) to make it permanent.
+
 Variants:
 
 - Latest preview: `...install.sh)" -- --preview`
@@ -52,7 +60,7 @@ nix profile install github:ververica/vvctl
 
 1. Download from the [latest release](https://github.com/ververica/vvctl/releases/latest).
 2. Extract the archive.
-3. Move `vvctl` into your `PATH` (e.g., `/usr/local/bin`), `chmod +x vvctl` on macOS/Linux.
+3. Move `vvctl` into your `PATH` (e.g., `~/.local/bin`), `chmod +x vvctl` on macOS/Linux.
 4. Verify: `vvctl --version`.
 
 ## Usage

@@ -7,7 +7,7 @@
 
 set -e
 
-INSTALL_DIR="${INSTALL_DIR:-/usr/local/bin}"
+INSTALL_DIR="${INSTALL_DIR:-$HOME/.local/bin}"
 REPO="ververica/vvctl"
 TEMP_DIR=$(mktemp -d)
 VERSION_ARG="$1"
@@ -116,16 +116,27 @@ fi
 
 # Install
 chmod +x "${TEMP_DIR}/vvctl"
+mkdir -p "$INSTALL_DIR"
 echo "Installing to ${INSTALL_DIR}/vvctl..."
-
-if [ -w "$INSTALL_DIR" ]; then
-    cp "${TEMP_DIR}/vvctl" "${INSTALL_DIR}/vvctl"
-else
-    sudo cp "${TEMP_DIR}/vvctl" "${INSTALL_DIR}/vvctl"
-fi
+cp "${TEMP_DIR}/vvctl" "${INSTALL_DIR}/vvctl"
 
 # Cleanup
 rm -rf "$TEMP_DIR"
 
 echo "vvctl installed successfully!"
+
+# Check if INSTALL_DIR is in PATH
+case ":$PATH:" in
+    *":${INSTALL_DIR}:"*) ;;
+    *)
+        echo ""
+        echo "WARNING: ${INSTALL_DIR} is not in your PATH."
+        echo "Add it by appending the following line to your shell profile (~/.bashrc, ~/.zshrc, etc.):"
+        echo ""
+        echo "  export PATH=\"${INSTALL_DIR}:\$PATH\""
+        echo ""
+        echo "Then restart your shell or run: source ~/.bashrc (or ~/.zshrc)"
+        ;;
+esac
+
 echo "Run 'vvctl --help' to get started"
