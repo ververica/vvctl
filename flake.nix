@@ -7,21 +7,34 @@
   };
 
   outputs = { self, nixpkgs, flake-utils }:
-    flake-utils.lib.eachSystem [ "x86_64-linux" ] (system:
+    let
+      version = "2026.10.3"; # Updated by workflow
+
+      # One release tarball per system. The release workflow rewrites each sha256; an empty one
+      # means that release has no tarball for the system, and the system is left out below.
+      targets = {
+        x86_64-linux = { triple = "x86_64-unknown-linux-gnu"; sha256 = "1bfa9f952dfe7a60c14910e996ae0918f84ca7e99163db6cd458174ca7e614da"; };
+        aarch64-linux = { triple = "aarch64-unknown-linux-gnu"; sha256 = ""; };
+      };
+
+      published = nixpkgs.lib.filterAttrs (_: t: t.sha256 != "") targets;
+    in
+    flake-utils.lib.eachSystem (builtins.attrNames published) (system:
       let
         pkgs = nixpkgs.legacyPackages.${system};
+        target = published.${system};
       in
       {
-        packages.default = pkgs.stdenv.mkDerivation rec {
+        packages.default = pkgs.stdenv.mkDerivation {
           pname = "vvctl";
-          version = "2026.10.3"; # Updated by workflow
-          
+          inherit version;
+
           src = pkgs.fetchurl {
-            url = "https://github.com/ververica/vvctl/releases/download/${version}/vvctl-${version}-x86_64-unknown-linux-gnu.tar.gz";
-            sha256 = "1bfa9f952dfe7a60c14910e996ae0918f84ca7e99163db6cd458174ca7e614da"; # Updated by workflow
+            url = "https://github.com/ververica/vvctl/releases/download/${version}/vvctl-${version}-${target.triple}.tar.gz";
+            sha256 = target.sha256;
           };
 
-          sourceRoot = "vvctl-2026.10.3-x86_64-unknown-linux-gnu";
+          sourceRoot = "vvctl-${version}-${target.triple}";
 
           installPhase = ''
             runHook preInstall
@@ -34,7 +47,7 @@
             homepage = "https://github.com/ververica/vvctl";
             license = licenses.asl20;
             maintainers = [ ];
-            platforms = [ "x86_64-linux" ];
+            platforms = builtins.attrNames published;
             mainProgram = "vvctl";
           };
         };
