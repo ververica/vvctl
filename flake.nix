@@ -8,13 +8,13 @@
 
   outputs = { self, nixpkgs, flake-utils }:
     let
-      version = "2026.10.4"; # Updated by workflow
+      version = "2026.10.5"; # Updated by workflow
 
       # One release tarball per system. The release workflow rewrites each sha256; an empty one
       # means that release has no tarball for the system, and the system is left out below.
       targets = {
-        x86_64-linux = { triple = "x86_64-unknown-linux-gnu"; sha256 = "1f2d03950bbcf340872c8b482095e0d3091465afcc6a87ff08e254015cd727b5"; };
-        aarch64-linux = { triple = "aarch64-unknown-linux-gnu"; sha256 = "a6e2a26baf0c55f2f003accd1d1c49ebbf665ec4d0a8d4c66efaabd75ec35581"; };
+        x86_64-linux = { triple = "x86_64-unknown-linux-gnu"; sha256 = "7bd8f06c118fe4ad52cfa6a22f564441582f17385809feae6a634cf154d2a095"; };
+        aarch64-linux = { triple = "aarch64-unknown-linux-gnu"; sha256 = "90d5471fba8d31dd3ba0befda37b6464d44dc6d8baf2127e25a9adaec81a6f9f"; };
       };
 
       published = nixpkgs.lib.filterAttrs (_: t: t.sha256 != "") targets;
