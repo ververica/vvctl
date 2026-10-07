@@ -1,0 +1,57 @@
+name: Nix flake
+
+# NixOS has no FHS loader, so a prebuilt Linux binary with a hardcoded /lib64 or /lib interpreter
+# cannot run there. We build and run the flake's package inside the official nixos/nix image,
+# which has the same gap, so this is the closest guard to a real NixOS user that CI can run. The
+# release bot rewrites flake.nix's version and sha256 lines on every stable release, so this also
+# reruns on its commits (push, path-filtered) to catch a nixpkgs or packaging regression same-day.
+
+on:
+  pull_request:
+    paths:
+      - flake.nix
+      - flake.lock
+      - .github/workflows/nix-flake.yml
+  push:
+    branches: [main]
+    paths:
+      - flake.nix
+      - flake.lock
+      - .github/workflows/nix-flake.yml
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+
+jobs:
+  nix-flake:
+    strategy:
+      fail-fast: false
+      matrix:
+        runner: [ubuntu-latest, ubuntu-24.04-arm]
+    runs-on: ${{ matrix.runner }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build the flake and run vvctl inside nixos/nix
+        run: |
+          docker run --rm -v "$GITHUB_WORKSPACE":/src -w /src nixos/nix:2.35.2 sh -eu -c '
+            # The checkout is owned by the runner user, and Nix as root refuses a git
+            # tree it does not own.
+            printf "[safe]\n\tdirectory = /src\n" > /root/.gitconfig
+
+            # Guard cannot pass for the wrong reason: fail fast if this image somehow
+            # ships an FHS loader after all.
+            for f in /lib64/ld-linux-x86-64.so.2 /lib/ld-linux-aarch64.so.1; do
+              if [ -e "$f" ]; then
+                echo "FHS loader $f exists in this image; the guard cannot prove anything" >&2
+                exit 1
+              fi
+            done
+
+            nix --extra-experimental-features "nix-command flakes" build --print-build-logs .#default
+
+            # vvctl creates a config on first run; keep it out of the runner image entirely.
+            mkdir -p /tmp/cfg /tmp/data /tmp/home
+            HOME=/tmp/home XDG_CONFIG_HOME=/tmp/cfg XDG_DATA_HOME=/tmp/data ./result/bin/vvctl --version
+          '
