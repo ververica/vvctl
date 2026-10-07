@@ -7,9 +7,27 @@
 
 set -e
 
-INSTALL_DIR="${INSTALL_DIR:-$HOME/.local/bin}"
+if [ -z "${INSTALL_DIR:-}" ]; then
+    if [ -z "${HOME:-}" ]; then
+        echo "Error: HOME is not set; export HOME or pass INSTALL_DIR explicitly" >&2
+        exit 1
+    fi
+    INSTALL_DIR="$HOME/.local/bin"
+fi
 REPO="ververica/vvctl"
 TEMP_DIR=$(mktemp -d)
+# TMP_BIN is set later, once the swap begins; referencing it before then
+# expands to an empty string. Clear any value inherited from the caller's
+# environment so an early failure can't delete a file it doesn't own.
+TMP_BIN=""
+# dash (the installer's shell on some systems) does not run EXIT traps on a
+# signal, so INT and TERM get their own traps that clean up and then exit,
+# instead of cleaning up and letting the script continue past the
+# interruption.
+cleanup() { rm -f "$TMP_BIN"; rm -rf "$TEMP_DIR"; }
+trap cleanup EXIT
+trap 'cleanup; exit 130' INT
+trap 'cleanup; exit 143' TERM
 VERSION_ARG="$1"
 PREVIEW_MODE=false
 
@@ -24,9 +42,14 @@ detect_platform() {
     local target
     case "$(uname -s)" in
         Linux*)
+            # Release binaries link against glibc and cannot start on musl (e.g. Alpine).
+            case "$(ldd --version 2>&1 || true)" in
+                *musl*) echo "Error: Unsupported Linux libc musl; vvctl requires glibc" >&2; exit 1;;
+            esac
             case "$(uname -m)" in
-                x86_64|amd64) target="x86_64-unknown-linux-gnu";;
-                *)            echo "Error: Unsupported Linux architecture $(uname -m)" >&2; exit 1;;
+                x86_64|amd64)  target="x86_64-unknown-linux-gnu";;
+                aarch64|arm64) target="aarch64-unknown-linux-gnu";;
+                *)             echo "Error: Unsupported Linux architecture $(uname -m)" >&2; exit 1;;
             esac
             ;;
         Darwin*)
@@ -116,9 +139,39 @@ fi
 
 # Install
 chmod +x "${TEMP_DIR}/vvctl"
-mkdir -p "$INSTALL_DIR"
 echo "Installing to ${INSTALL_DIR}/vvctl..."
-cp "${TEMP_DIR}/vvctl" "${INSTALL_DIR}/vvctl"
+
+# Swap by rename: create an unpredictable temp file in the same directory
+# with `mktemp` (atomic, exclusive creation, so it never follows a
+# pre-existing symlink planted at a guessable path), copy the binary into
+# it, then `mv -f` it onto the target. A rename never touches the old
+# file's inode, so a running vvctl (or macOS's signature cache) keeps
+# reading the old bytes until it re-execs, instead of exiting 137
+# mid-copy.
+if mkdir -p "$INSTALL_DIR" 2>/dev/null && [ -w "$INSTALL_DIR" ]; then
+    TMP_BIN=$(mktemp "${INSTALL_DIR}/.vvctl.XXXXXX")
+    cp "${TEMP_DIR}/vvctl" "$TMP_BIN"
+    chmod 755 "$TMP_BIN"
+    mv -f "$TMP_BIN" "${INSTALL_DIR}/vvctl"
+else
+    # One `sudo sh -c` bundles mkdir+cp+chmod+mv so the user is prompted
+    # once, not four times, and a missing privileged directory (e.g.
+    # /opt/vvctl/bin) is created under the same privilege decision as the
+    # swap. Paths go in as arguments, never into the command string. The
+    # helper echoes the exact mktemp path it created as its first line of
+    # output so a failure can clean up precisely that file instead of
+    # globbing every ".vvctl.*" temp file in the directory (which could
+    # belong to a concurrent install).
+    if ! TMP_BIN=$(sudo sh -c '
+            mkdir -p "$1" || exit 1
+            tmp=$(mktemp "$1/.vvctl.XXXXXX") || exit 1
+            echo "$tmp"
+            cp "$2" "$tmp" && chmod 755 "$tmp" && mv -f "$tmp" "$1/vvctl"
+        ' sh "$INSTALL_DIR" "${TEMP_DIR}/vvctl"); then
+        [ -n "$TMP_BIN" ] && sudo rm -f "$TMP_BIN"
+        exit 1
+    fi
+fi
 
 # Cleanup
 rm -rf "$TEMP_DIR"
