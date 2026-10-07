@@ -29,6 +29,13 @@
           pname = "vvctl";
           inherit version;
 
+          # The release binary expects an FHS loader and system libraries; autoPatchelfHook
+          # rewrites its interpreter and RPATH to point into the Nix store instead. x86_64 links
+          # OpenSSL 3 (libssl.so.3) — openssl_3_5 pins that soname; aarch64 vendors OpenSSL so it
+          # gets no OpenSSL RPATH entry.
+          nativeBuildInputs = [ pkgs.autoPatchelfHook ];
+          buildInputs = [ pkgs.openssl_3_5 pkgs.stdenv.cc.cc.lib ];
+
           src = pkgs.fetchurl {
             url = "https://github.com/ververica/vvctl/releases/download/${version}/vvctl-${version}-${target.triple}.tar.gz";
             sha256 = target.sha256;
