@@ -62,7 +62,9 @@ runs:
         fi
 
         # Set outputs
-        INSTALLED_VERSION=$(${INSTALL_DIR}/vvctl --version | awk '/^[0-9]/{print $1; exit}')
+        # Read all of vvctl's output: an awk that exits early closes the pipe while vvctl is
+        # still writing, and vvctl then fails on the broken pipe under pipefail.
+        INSTALLED_VERSION=$(${INSTALL_DIR}/vvctl --version | awk '/^[0-9]/ && !v {v=$1} END {print v}')
         echo "version=${INSTALLED_VERSION}" >> $GITHUB_OUTPUT
         echo "install-path=${INSTALL_DIR}/vvctl" >> $GITHUB_OUTPUT
 
